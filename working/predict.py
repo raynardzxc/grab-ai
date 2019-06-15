@@ -124,6 +124,6 @@ print ("[INFO] Predictions generated and saved in {}".format(os.path.join(args["
 df_txt = df_txt.sort_values(by=['pictureId'])
 df_txt['classId'] = df_txt['classId'] + 1 ## evaluation classes start from 1
 columnsTitles = ['classId']
-df_txt=df_txt.reindex(columns=columnsTitles)
+df_txt = df_txt.reindex(columns=columnsTitles)
 df_txt.to_csv(os.path.join(args["output"], "FinalSubmission.txt"), header=False, index=False, sep=' ', mode='a')
 print ("[INFO] Predictions generated and saved in {}".format(os.path.join(args["output"], "FinalSubmission.txt")))
