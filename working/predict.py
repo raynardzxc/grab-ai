@@ -25,7 +25,7 @@ args = vars(ap.parse_args())
 
 model0 = load_model(MODEL0_PATH, backbone_name="resnet50", convert=True)
 model1 = load_model(MODEL1_PATH, backbone_name="resnet101", convert=True)
-model2 = load_model(MODEL2_PATH, backbone_name="resnet50", convert=True)
+model2 = load_model(MODEL2_PATH, backbone_name="resnet50", convert=True) 
 model3 = load_model(MODEL3_PATH, backbone_name="resnet50", convert=True)
 
 model_list = [model0, model1, model2, model3]
@@ -119,11 +119,13 @@ for i in range(len(df)):
 
 df.insert(6, "className", labels_df) 
 df.to_csv(os.path.join(args["output"], "FinalSubmission.csv"), index=False)
-print ("[INFO] Predictions generated and saved in {}".format(os.path.join(args["output"], "FinalSubmission.csv")))
+print ("[INFO] Predictions for csv generated and saved in {}".format(os.path.join(args["output"], "FinalSubmission.csv")))
 
-df_txt = df_txt.sort_values(by=['pictureId'])
-df_txt['classId'] = df_txt['classId'] + 1 ## evaluation classes start from 1
+df_txt = df_txt.sort_values(by=['pictureId']) 
 columnsTitles = ['classId']
 df_txt = df_txt.reindex(columns=columnsTitles)
-df_txt.to_csv(os.path.join(args["output"], "FinalSubmission.txt"), header=False, index=False, sep=' ', mode='a')
-print ("[INFO] Predictions generated and saved in {}".format(os.path.join(args["output"], "FinalSubmission.txt")))
+
+## evaluation classes start from 1
+df_txt = df_txt + 1
+df_txt.to_csv(os.path.join(args["output"], "FinalSubmission.txt"), header=False, index=False, sep=' ')
+print ("[INFO] Predictions for evaluation generated and saved in {}".format(os.path.join(args["output"], "FinalSubmission.txt")))
