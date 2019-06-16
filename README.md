@@ -37,9 +37,9 @@ To prepare the data for training, run the following script to get all the data i
 
 ## Training 
 
-Training is done through stratified 4-fold cross validation with the final prediction done through an ensemble of the 4 models.
+Training is done through stratified 4-fold cross validation by class with the final prediction done through an ensemble of the 4 models.
 
-Each model is trained with different parameters such as intialisation weights, data augmentation and backbone.
+Each model is trained with different parameters such as intialisation weights, data augmentation and model backbone.
 
 To train all models in the ensemble:
 
@@ -48,6 +48,7 @@ To train all models in the ensemble:
 Comment out lines if you only wish to train specific models. 
 
 ## Trained Models 
+
 The training code for the models depends on the existence of the pretrained models.
 
 To download the trained models as well as the pretrained COCO model I used for the challenge, in `$TOP/working` use: 
@@ -70,6 +71,8 @@ This should produce predictions for the test data in `$TOP/FinalSubmission.csv` 
 `[imageName, box_x, box_y, box_w, box_h, class, className, confidence]`
 
 A text file will also be produced in `$TOP/FinalSubmission.txt` for submission on the [Cars Dataset](https://ai.stanford.edu/~jkrause/cars/car_dataset.html) evaluation server.
+
+Due to time and cost I only trained each model for 20 epochs and the ensemble model achieves 59.20% accuracy on the test set. I believe with more training the accuracy and mAP of the ensemble model will improve.
 
 ## Acknowledgements
 
