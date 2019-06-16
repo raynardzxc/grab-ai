@@ -24,7 +24,7 @@ ap.add_argument("-o", "--output", default=OUTPUT_DIR,
 args = vars(ap.parse_args())
 
 model0 = load_model(MODEL0_PATH, backbone_name="resnet50", convert=True)
-model1 = load_model(MODEL1_PATH, backbone_name="resnet101", convert=True)
+model1 = load_model(MODEL1_PATH, backbone_name="resnet101", convert=True) 
 model2 = load_model(MODEL2_PATH, backbone_name="resnet50", convert=True) 
 model3 = load_model(MODEL3_PATH, backbone_name="resnet50", convert=True)
 
@@ -53,9 +53,9 @@ for (i, imagePath) in enumerate(imagePaths):
 
     for index, model in enumerate(model_list):
         prediction = model.predict_on_batch(image)
-        bboxes = prediction[0][0][:1] / scale
-        scores = prediction[1][0][:1]; scores = np.clip(scores, 0, 1)
-        labels = prediction[2][0][:1]
+        bboxes = prediction[0][0][:10] / scale
+        scores = prediction[1][0][:10]; scores = np.clip(scores, 0, 1)
+        labels = prediction[2][0][:10]
         bboxes = [[box[0], box[1], box[2]-box[0], box[3]-box[1]] for box in bboxes]
         final_pred = [list(_) + [labels[i], scores[i]] for i, _ in enumerate(bboxes)]
         individual_preds.append(final_pred)
@@ -79,7 +79,7 @@ detections_list = []
 for each_pid in test_pids: 
     tmp_df = det_df[det_df.pid == each_pid] 
     individual_pid_dets = []
-    for each_model in range(1): 
+    for each_model in range(4): 
         individual_model_dets = [] 
         tmp_model_df = tmp_df[tmp_df.modelId == each_model] 
         for rowNum, row in tmp_model_df.iterrows(): 
@@ -106,8 +106,11 @@ for index, each_det in enumerate(ensemble_dets):
     df = df.append(tmp_df) 
 
 # clean up
+df = df.sort_values(by=['score'], ascending=False).drop_duplicates(subset=['pictureId'])
 df['classId'] = df.classId.astype('int')
+df = df.sort_values(by=['pictureId'])
 df = df.reset_index(drop=True)
+
 df_txt = df.copy()
 
 # Add className
@@ -121,7 +124,6 @@ df.insert(6, "className", labels_df)
 df.to_csv(os.path.join(args["output"], "FinalSubmission.csv"), index=False)
 print ("[INFO] Predictions for csv generated and saved in {}".format(os.path.join(args["output"], "FinalSubmission.csv")))
 
-df_txt = df_txt.sort_values(by=['pictureId']) 
 columnsTitles = ['classId']
 df_txt = df_txt.reindex(columns=columnsTitles)
 
